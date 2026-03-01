@@ -41,7 +41,7 @@ jobs:
         file tfs || echo "File command failed"
     
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: tfs-binary
         path: tfs
