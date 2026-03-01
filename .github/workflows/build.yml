@@ -49,14 +49,14 @@ jobs:
     - name: Check binary
       run: |
         cd $GITHUB_WORKSPACE
-        ls -lh tfs || echo "Binary not found!"
-        file tfs || echo "File command failed"
+        ls -lh theforgottenserver || echo "Binary not found!"
+        file theforgottenserver || echo "File command failed"
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: tfs-binary
-        path: tfs
+        path: theforgottenserver
         retention-days: 30
     
     - name: Release
