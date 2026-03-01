@@ -17,7 +17,9 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential libxml2-dev libboost-all-dev automake autoconf pkg-config libtool
+        sudo apt-get install -y build-essential libxml2-dev automake autoconf pkg-config libtool
+        # Try to install older boost compatible with TFS 0.3.6
+        sudo apt-get install -y libboost1.74-all-dev || sudo apt-get install -y libboost-all-dev
     
     - name: Regenerate build system
       run: |
@@ -28,7 +30,7 @@ jobs:
     - name: Configure
       run: |
         cd $GITHUB_WORKSPACE
-        CXXFLAGS="-O0 -g -fno-strict-aliasing" LDFLAGS="-Wl,--as-needed -pthread" ./configure --prefix=/opt/tfs 2>&1 | tee configure.log
+        CXXFLAGS="-O0 -g -fno-strict-aliasing -fno-strict-overflow" LDFLAGS="-Wl,--no-as-needed" ./configure --prefix=/opt/tfs 2>&1 | tee configure.log
         echo "=== configure completed ==="
     
     - name: Build
