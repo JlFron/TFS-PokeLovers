@@ -59,11 +59,15 @@ inline Task* createTask(uint32_t expiration, boost::function<void (void)> f)
 class Dispatcher
 {
 	public:
-		virtual ~Dispatcher() {}
+		// Prevent destruction to avoid boost pthread destructor bug
+		~Dispatcher() {}
+		
 		static Dispatcher& getInstance()
 		{
-			static Dispatcher dispatcher;
-			return dispatcher;
+			static Dispatcher* dispatcher = NULL;
+			if(!dispatcher)
+				dispatcher = new Dispatcher();
+			return *dispatcher;
 		}
 
 		void addTask(Task* task, bool front = false);
