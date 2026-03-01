@@ -59,8 +59,8 @@ inline Task* createTask(uint32_t expiration, boost::function<void (void)> f)
 class Dispatcher
 {
 	public:
-		// Prevent destruction to avoid boost pthread destructor bug
-		~Dispatcher() {}
+		// Explicitly deleted destructor to prevent boost pthread destructor bug on exit
+		~Dispatcher() = delete;
 		
 		static Dispatcher& getInstance()
 		{
