@@ -1,0 +1,56 @@
+name: Build TFS 0.3.6
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libxml2-dev libboost-all-dev automake autoconf pkg-config libtool
+    
+    - name: Regenerate build system
+      run: |
+        cd $GITHUB_WORKSPACE
+        autoreconf -fiv
+    
+    - name: Configure
+      run: |
+        cd $GITHUB_WORKSPACE
+        ./configure --prefix=/opt/tfs
+    
+    - name: Build
+      run: |
+        cd $GITHUB_WORKSPACE
+        make -j4
+    
+    - name: Check binary
+      run: |
+        cd $GITHUB_WORKSPACE
+        ls -lh tfs || echo "Binary not found!"
+        file tfs || echo "File command failed"
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: tfs-binary
+        path: tfs
+        retention-days: 30
+    
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: tfs
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

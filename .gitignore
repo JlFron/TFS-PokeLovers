@@ -1,0 +1,40 @@
+# Build files
+*.o
+*.a
+*.so
+*.dylib
+tfs
+TheForgottenServer-debug.dev
+
+# Autoconf
+Makefile
+Makefile.in
+autom4te.cache/
+configure
+config.status
+config.log
+config.h
+config.h.in
+
+# Dependencies
+.deps/
+*.Po
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.env
+
+# Build directories
+build/
+dist/
+dev-cpp/*.dev
+
+# Temp files
+*.tmp

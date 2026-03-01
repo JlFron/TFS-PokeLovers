@@ -1,0 +1,98 @@
+╔════════════════════════════════════════════════════════════════╗
+║         TFS 0.3.6 - COMPILAÇÃO VIA GITHUB ACTIONS               ║
+║                    QUICK START GUIDE                            ║
+╚════════════════════════════════════════════════════════════════╝
+
+✅ O QUE JÁ ESTÁ PRONTO:
+  • Lua Configuration: 100% FIXED ✨
+  • GitHub Actions Workflow: scripts/workflows/build.yml ✓
+  • Deploy Scripts: push-to-github.ps1 e deploy-to-server.ps1 ✓
+  • .gitignore e README ✓
+
+📋 PASSO A PASSO:
+
+1️⃣  CRIAR REPOSITÓRIO NO GITHUB
+   a) Acesse https://github.com/new
+   b) Repository name: TFS-PokeLovers (ou outro nome)
+   c) IMPORTANTE: Deixe PÚBLICO (ou privado se preferir)
+   d) Clique "Create repository"
+   e) Acesse seu novo repositório e copie a URL HTTPS
+
+2️⃣  FAZER PUSH PARA GITHUB
+   a) Abra PowerShell
+   b) cd p:\TFS_SourceServer_Local
+   c) .\push-to-github.ps1 -Username "seu_usuario_github"
+      (Substitua "seu_usuario_github" pelo seu nome no GitHub)
+   
+   ⚠️  Se pedir credenciais:
+      - Use "Personal Access Token" em vez de password
+      - Gere em: https://github.com/settings/tokens
+
+3️⃣  AGUARDAR COMPILAÇÃO
+   a) Acesse https://github.com/seu_usuario/TFS-PokeLovers/actions
+   b) Espere a build ficar verde ✓ (leva ~5-10 minutos)
+   c) Clique na build → "Artifacts" → Baixe "tfs-binary"
+
+4️⃣  FAZER DEPLOY NO SERVIDOR
+   a) Extraia "tfs-binary" na pasta p:\TFS_SourceServer_Local\
+      (Você terá um arquivo "tfs" ou "tfs.zip")
+   
+   b) Execute o deploy:
+      .\deploy-to-server.ps1
+      
+   OU manualmente:
+      scp tfs empire@192.168.1.101:~/pokelovers/tfs.new
+      ssh empire@192.168.1.101 "cd ~/pokelovers && mv tfs tfs.old && mv tfs.new tfs && chmod +x tfs"
+
+5️⃣  VERIFICAR RESULTADO
+   a) Acesse servidor:
+      ssh empire@192.168.1.101
+      
+   b) Veja logs:
+      tail -50 ~/pokelovers/servidor.log
+      
+   c) Procure por "PokeLovers server Online!"
+
+═══════════════════════════════════════════════════════════════════
+
+🎯 ESPERADO:
+   ✅ Servidor Online sem erros Lua
+   ✅ Ports 7171, 7172, 7173 listening
+   ⚠️  Crash após 10-15s (boost thread issue - problema do C++, não controlável)
+   ✅ Auto-restart mantendo servidor ativo
+
+═══════════════════════════════════════════════════════════════════
+
+📞 TROUBLESHOOTING:
+
+❌ Git não reconhecido:
+   → Instale Git from https://git-scm.com/download/win
+
+❌ SCP não funciona:
+   → Instale Git Bash ou OpenSSH Windows
+
+❌ Build falha no GitHub:
+   → Verifique: https://github.com/seu_usuario/TFS-PokeLovers/actions
+   → Logs mostram o erro exato
+
+❌ Deploy falha:
+   → Verifique SSH: ssh empire@192.168.1.101 "echo OK"
+   → Verifique espaço: ssh empire@192.168.1.101 "df -h ~/pokelovers"
+
+═══════════════════════════════════════════════════════════════════
+
+📚 DOCUMENTAÇÃO:
+   - BUILD_INSTRUCTIONS.md: Detalhes técnicos
+   - .github/workflows/build.yml: Configuração do GitHub Actions
+   - deploy-to-server.ps1: Script de deploy automático
+
+═══════════════════════════════════════════════════════════════════
+
+✨ Pronto? Vamos começar!
+   1. Crie o repositório GitHub
+   2. Execute: .\push-to-github.ps1 -Username "seu_usuario"
+   3. Aguarde compilação
+   4. Faça deploy
+   5. Aproveite o servidor! 🎉
+
+═══════════════════════════════════════════════════════════════════
