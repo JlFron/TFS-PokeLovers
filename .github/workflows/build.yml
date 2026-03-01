@@ -22,17 +22,29 @@ jobs:
     - name: Regenerate build system
       run: |
         cd $GITHUB_WORKSPACE
-        autoreconf -fiv
+        autoreconf -fiv 2>&1 | tee autoreconf.log
+        echo "=== autoreconf completed ==="
     
     - name: Configure
       run: |
         cd $GITHUB_WORKSPACE
-        ./configure --prefix=/opt/tfs
+        ls -la configure
+        ./configure --prefix=/opt/tfs 2>&1 | tee configure.log
+        echo "=== configure completed ==="
     
     - name: Build
       run: |
         cd $GITHUB_WORKSPACE
-        make -j4
+        make -j4 2>&1 | tee make.log
+        echo "=== make completed ==="
+    
+    - name: Show build logs on failure
+      if: failure()
+      run: |
+        cd $GITHUB_WORKSPACE
+        echo "=== autoreconf.log ===" && tail -100 autoreconf.log || true
+        echo "=== configure.log ===" && tail -100 configure.log || true
+        echo "=== make.log ===" && tail -100 make.log || true
     
     - name: Check binary
       run: |
