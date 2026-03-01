@@ -28,7 +28,7 @@ jobs:
     - name: Configure
       run: |
         cd $GITHUB_WORKSPACE
-        CXXFLAGS="-O2 -fno-strict-aliasing -Wno-strict-aliasing -Wno-unused-result" ./configure --prefix=/opt/tfs 2>&1 | tee configure.log
+        CXXFLAGS="-O0 -g -fno-strict-aliasing" LDFLAGS="-Wl,--as-needed -pthread" ./configure --prefix=/opt/tfs 2>&1 | tee configure.log
         echo "=== configure completed ==="
     
     - name: Build
