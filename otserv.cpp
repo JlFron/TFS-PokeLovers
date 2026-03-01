@@ -286,6 +286,9 @@ void serverMain(void* param)
 	sigh.sa_flags = 0;
 	sigemptyset(&sigh.sa_mask);
 	sigaction(SIGPIPE, &sigh, NULL);
+	
+	// ignore sigabrt (boost pthread destructor bug workaround)
+	sigaction(SIGABRT, &sigh, NULL);
 
 	// register signals
 	signal(SIGHUP, signalHandler); //save

@@ -17,7 +17,6 @@
 #include "otpch.h"
 #include "tasks.h"
 
-#include <unistd.h>
 #include "outputmessage.h"
 #if defined __EXCEPTION_TRACER__
 #include "exception.h"
@@ -141,8 +140,4 @@ void Dispatcher::shutdown()
 
 	flush();
 	m_taskLock.unlock();
-	
-	// Force exit without calling destructors to avoid boost pthread crash
-	// This is a workaround for the condition_variable destructor bug
-	_exit(0);
 }
